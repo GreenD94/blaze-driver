@@ -1,0 +1,47 @@
+build/
+.idea
+.gradle
+.dart_tool
+.vscode/launch.json
+.vscode/settings.json
+
+### Flutter ###
+# Flutter/Dart/Pub related
+**/doc/api/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.fvm/flutter_sdk
+.packages
+.pub-cache/
+.pub/
+build/
+coverage/
+lib/generated_plugin_registrant.dart
+# For library packages, don’t commit the pubspec.lock file.
+# Regenerating the pubspec.lock file lets you test your package against the latest compatible versions of its dependencies.
+# See https://dart.dev/guides/libraries/private-files#pubspeclock
+#pubspec.lock
+
+# Android related
+**/android/**/gradle-wrapper.jar
+**/android/.gradle
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/key.properties
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+
+# iOS build artifacts
+**/*.xcuserdatad/
+**/*.xcworkspace/
+**/*.pbxproj
+**/Pods/
+**/Runner.xcworkspace
+
+# Android APK and AAB
+*.apk
+*.aab
+
+.fvm/flutter_sdk
