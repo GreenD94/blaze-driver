@@ -6,7 +6,10 @@ var errorThisFieldRequired = 'This field is required';
 
 const googleMapAPIKey = 'AIzaSyD6tYAgVljLJ50H-Ubw5bTjlHWH3z_fUIA';
 
-const DOMAIN_URL = 'https://www.blazetaxi.com'; // Don't add slash at the end of the url
+const DOMAIN_URL =
+    'http://myfirstaplication-env.eba-3qpvzwfc.us-east-1.elasticbeanstalk.com';
+
+//'https://www.blazetaxi.com'; // Don't add slash at the end of the url
 const mBaseUrl = "$DOMAIN_URL/api/";
 
 final client = MqttServerClient.withPort("broker.hivemq.com", "", 1883);
@@ -170,8 +173,10 @@ const LEFT = 'left';
 const CLOCK = 'clock';
 const PRESENT_TOPUP_AMOUNT = 'preset_topup_amount';
 const PRESENT_TIP_AMOUNT = 'preset_tip_amount';
-const MAX_TIME_FOR_RIDER_MINUTE = 'max_time_for_find_drivers_for_regular_ride_in_minute';
-const MAX_TIME_FOR_DRIVER_SECOND = 'ride_accept_decline_duration_for_driver_in_second';
+const MAX_TIME_FOR_RIDER_MINUTE =
+    'max_time_for_find_drivers_for_regular_ride_in_minute';
+const MAX_TIME_FOR_DRIVER_SECOND =
+    'ride_accept_decline_duration_for_driver_in_second';
 const MIN_AMOUNT_TO_ADD = 'min_amount_to_add';
 const MAX_AMOUNT_TO_ADD = 'max_amount_to_add';
 const APPLY_ADDITIONAL_FEE = 'apply_additional_fee';
