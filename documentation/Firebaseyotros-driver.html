@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación Blaze Driver - Firebase, OneSignal y MQTT</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 20px;
+        }
+        
+        h2 {
+            color: #34495e;
+            font-size: 1.8em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        h3 {
+            color: #2c3e50;
+            font-size: 1.4em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h4 {
+            color: #34495e;
+            font-size: 1.2em;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        
+        .info-box {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .warning-box {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .success-box {
+            background-color: #e8f5e8;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .flow-diagram {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .flow-step {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 15px 25px;
+            margin: 10px;
+            border-radius: 25px;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .flow-step::after {
+            content: "→";
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5em;
+            color: #3498db;
+        }
+        
+        .flow-step:last-child::after {
+            display: none;
+        }
+        
+        .architecture-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .service-box {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 150px;
+            margin: 10px;
+        }
+        
+        .service-box h4 {
+            color: white;
+            margin: 0 0 10px 0;
+        }
+        
+        .connection-line {
+            width: 50px;
+            height: 2px;
+            background-color: #3498db;
+            margin: 0 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .key-value {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+        
+        .key {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .value {
+            font-family: 'Courier New', monospace;
+            color: #e74c3c;
+            word-break: break-all;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        
+        .toc a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        
+        .version-info {
+            background-color: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            
+            .flow-diagram, .architecture-diagram {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚗 Documentación Blaze Driver</h1>
+        <h2>Firebase, OneSignal y MQTT - Configuración y Implementación</h2>
+        
+        <div class="version-info">
+            <strong>Versión del Proyecto:</strong> 1.1.8+12<br>
+            <strong>Fecha de Documentación:</strong> Diciembre 2024<br>
+            <strong>Flutter SDK:</strong> >=2.17.1 <3.0.0
+        </div>
+
+        <div class="toc">
+            <h3>📋 Tabla de Contenidos</h3>
+            <ul>
+                <li><a href="#overview">1. Resumen Ejecutivo</a></li>
+                <li><a href="#firebase">2. Configuración Firebase</a></li>
+                <li><a href="#onesignal">3. Configuración OneSignal</a></li>
+                <li><a href="#mqtt">4. Configuración MQTT</a></li>
+                <li><a href="#architecture">5. Arquitectura del Sistema</a></li>
+                <li><a href="#flows">6. Diagramas de Flujo</a></li>
+                <li><a href="#security">7. Consideraciones de Seguridad</a></li>
+                <li><a href="#troubleshooting">8. Solución de Problemas</a></li>
+            </ul>
+        </div>
+
+        <section id="overview">
+            <h2>1. 📊 Resumen Ejecutivo</h2>
+            
+            <div class="info-box">
+                <strong>Blaze Driver</strong> es una aplicación móvil desarrollada en Flutter para conductores de taxi que integra múltiples servicios en la nube para proporcionar una experiencia de usuario completa y en tiempo real.
+            </div>
+
+            <h3>Servicios Integrados:</h3>
+            <div class="architecture-diagram">
+                <div class="service-box">
+                    <h4>🔥 Firebase</h4>
+                    <p>Autenticación<br>Base de Datos<br>Crashlytics</p>
+                </div>
+                <div class="connection-line"></div>
+                <div class="service-box">
+                    <h4>📱 OneSignal</h4>
+                    <p>Notificaciones Push<br>Segmentación<br>Analytics</p>
+                </div>
+                <div class="connection-line"></div>
+                <div class="service-box">
+                    <h4>📡 MQTT</h4>
+                    <p>Comunicación Tiempo Real<br>Broker HiveMQ<br>Mensajería</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="firebase">
+            <h2>2. 🔥 Configuración Firebase</h2>
+            
+            <h3>2.1 Configuración del Proyecto</h3>
+            
+            <div class="key-value">
+                <span class="key">Project ID:</span>
+                <span class="value">blaze-taxi-662b8</span>
+            </div>
+            <div class="key-value">
+                <span class="key">Firebase URL:</span>
+                <span class="value">https://blaze-taxi-662b8-default-rtdb.firebaseio.com</span>
+            </div>
+            <div class="key-value">
+                <span class="key">Storage Bucket:</span>
+                <span class="value">blaze-taxi-662b8.appspot.com</span>
+            </div>
+
+            <h3>2.2 Dependencias Firebase</h3>
+            <div class="code-block">
+firebase_core: ^2.15.0
+firebase_auth: ^4.7.0
+firebase_storage: ^11.2.5
+firebase_database: ^10.2.4
+firebase_crashlytics: ^3.3.4
+cloud_firestore: ^4.8.3
+            </div>
+
+            <h3>2.3 Inicialización en main.dart</h3>
+            <div class="code-block">
+void main() async {
+  HttpOverrides.global = new MyHttpOverrides();
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  Firebase.initializeApp().then((value) {
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  });
+  
+  // ... resto de la configuración
+}
+            </div>
+
+            <h3>2.4 Configuración Android (google-services.json)</h3>
+            <div class="info-box">
+                <strong>Package Name:</strong> com.isoftdesing.blazeDriver<br>
+                <strong>API Key:</strong> AIzaSyA8zG9ZLnejAVVwCwBRa-i0eBK0YRDRCww<br>
+                <strong>Client ID:</strong> 276086092198-fcc53l7lrpe8dj0oplk6gm32cclurebs.apps.googleusercontent.com
+            </div>
+
+            <h3>2.5 Configuración iOS (GoogleService-Info.plist)</h3>
+            <div class="info-box">
+                <strong>Bundle ID:</strong> com.mighty.taxidriver<br>
+                <strong>Project ID:</strong> taxi-booking-810bf<br>
+                <strong>API Key:</strong> AIzaSyBX8XjmaGyakRzXdsWR5Ro-MH4wgBIg4gs
+            </div>
+        </section>
+
+        <section id="onesignal">
+            <h2>3. 📱 Configuración OneSignal</h2>
+            
+            <h3>3.1 Configuración de Claves</h3>
+            <div class="key-value">
+                <span class="key">App ID (Driver):</span>
+                <span class="value">147b81d7-b572-444f-ace0-2b2b1ee0640c</span>
+            </div>
+            <div class="key-value">
+                <span class="key">Rest Key (Driver):</span>
+                <span class="value">147b81d7-b572-444f-ace0-2b2b1ee0640c</span>
+            </div>
+            <div class="key-value">
+                <span class="key">Channel ID:</span>
+                <span class="value">633149d9-ac48-432c-8fab-6f529f4017de</span>
+            </div>
+
+            <h3>3.2 Inicialización OneSignal</h3>
+            <div class="code-block">
+await OneSignal.shared.setAppId(mOneSignalAppIdDriver);
+OneSignal.shared.sendTag("segment", "drivers");
+OneSignal.shared.consentGranted(true);
+OneSignal.shared.promptUserForPushNotificationPermission();
+OneSignal.shared.setNotificationWillShowInForegroundHandler((OSNotificationReceivedEvent event) {
+  event.complete(event.notification);
+});
+            </div>
+
+            <h3>3.3 Servicio de Notificaciones</h3>
+            <div class="code-block">
+class NotificationService {
+  Future<void> sendPushNotifications(String title, String content, {String? id, String? image, String? receiverPlayerId}) async {
+    Map req = {
+      'headings': {'en': title},
+      'contents': {'en': content},
+      'big_picture': image.validate().isNotEmpty ? image.validate() : '',
+      'large_icon': image.validate().isNotEmpty ? image.validate() : '',
+      'app_id': mOneSignalAppIdRider,
+      'include_player_ids': [receiverPlayerId],
+      'android_group': mAppName,
+    };
+    
+    var header = {
+      HttpHeaders.authorizationHeader: 'Basic $mOneSignalRestKeyRider',
+      HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
+    };
+
+    Response res = await post(
+      Uri.parse('https://onesignal.com/api/v1/notifications'),
+      body: jsonEncode(req),
+      headers: header,
+    );
+  }
+}
+            </div>
+
+            <h3>3.4 Configuración iOS (OneSignalNotificationServiceExtension)</h3>
+            <div class="info-box">
+                Se ha configurado una extensión de servicio de notificaciones para iOS que permite el procesamiento de notificaciones push en segundo plano.
+            </div>
+        </section>
+
+        <section id="mqtt">
+            <h2>4. 📡 Configuración MQTT</h2>
+            
+            <h3>4.1 Configuración del Cliente MQTT</h3>
+            <div class="key-value">
+                <span class="key">Broker:</span>
+                <span class="value">broker.hivemq.com</span>
+            </div>
+            <div class="key-value">
+                <span class="key">Puerto:</span>
+                <span class="value">1883</span>
+            </div>
+            <div class="key-value">
+                <span class="key">Protocolo:</span>
+                <span class="value">MQTT v3.1.1</span>
+            </div>
+
+            <h3>4.2 Inicialización del Cliente</h3>
+            <div class="code-block">
+final client = MqttServerClient.withPort("broker.hivemq.com", "", 1883);
+
+mqttForUser() async {
+  client.setProtocolV311();
+  client.logging(on: true);
+  client.keepAlivePeriod = 120;
+  client.autoReconnect = true;
+
+  try {
+    await client.connect();
+  } on NoConnectionException catch (e) {
+    debugPrint(e.toString());
+    client.connect();
+  }
+
+  if (client.connectionStatus!.state == MqttConnectionState.connected) {
+    client.onSubscribed = onSubscribed;
+    log('connected');
+  } else {
+    client.connect();
+  }
+}
+            </div>
+
+            <h3>4.3 Topics Suscritos</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Topic</th>
+                        <th>Descripción</th>
+                        <th>QoS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>new_ride_request_{USER_ID}</td>
+                        <td>Nuevas solicitudes de viaje</td>
+                        <td>AtLeastOnce</td>
+                    </tr>
+                    <tr>
+                        <td>ride_request_status_{USER_ID}</td>
+                        <td>Cambios de estado en viajes</td>
+                        <td>AtLeastOnce</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>4.4 Manejo de Mensajes MQTT</h3>
+            <div class="code-block">
+client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) async {
+  final MqttPublishMessage recMess = c![0].payload as MqttPublishMessage;
+  final pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+
+  OnRideRequest rideRequest = OnRideRequest.fromJson(jsonDecode(pt)['result']);
+
+  if (jsonDecode(pt)['success_type'] == "new_ride_requested") {
+    // Manejar nueva solicitud de viaje
+    servicesListData = OnRideRequest.fromJson(jsonDecode(pt)['result']);
+    _playNotificationSound();
+    addOrUpdateRideRequests(rideRequest);
+  } else if (jsonDecode(pt)['success_type'] == "canceled") {
+    // Manejar cancelación de viaje
+    sharedPref.remove(ON_RIDE_MODEL);
+    servicesListData = null;
+  } else if (jsonDecode(pt)['success_type'] == 'accepted') {
+    // Manejar aceptación de viaje
+    servicesListData = OnRideRequest.fromJson(jsonDecode(pt)['result']);
+    rideRequests.clear();
+    isInProgress = true;
+  } else if (jsonDecode(pt)['success_type'] == COMPLETED) {
+    // Navegar a pantalla de detalles
+    launchScreen(context, DetailScreen(), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+  }
+});
+            </div>
+        </section>
+
+        <section id="architecture">
+            <h2>5. 🏗️ Arquitectura del Sistema</h2>
+            
+            <div class="flow-diagram">
+                <h3>Arquitectura General de Blaze Driver</h3>
+                <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
+                    <div style="background-color: #3498db; color: white; padding: 15px; border-radius: 10px; margin: 10px; text-align: center;">
+                        <strong>App Flutter</strong><br>
+                        Driver Interface
+                    </div>
+                    <div style="font-size: 2em; margin: 10px;">↔</div>
+                    <div style="background-color: #e74c3c; color: white; padding: 15px; border-radius: 10px; margin: 10px; text-align: center;">
+                        <strong>Backend API</strong><br>
+                        AWS Elastic Beanstalk
+                    </div>
+                    <div style="font-size: 2em; margin: 10px;">↔</div>
+                    <div style="background-color: #f39c12; color: white; padding: 15px; border-radius: 10px; margin: 10px; text-align: center;">
+                        <strong>Firebase</strong><br>
+                        Auth & Database
+                    </div>
+                </div>
+            </div>
+
+            <h3>5.1 Flujo de Comunicación en Tiempo Real</h3>
+            <div class="flow-diagram">
+                <div class="flow-step">Rider Request</div>
+                <div class="flow-step">MQTT Broker</div>
+                <div class="flow-step">Driver App</div>
+                <div class="flow-step">Accept/Reject</div>
+                <div class="flow-step">OneSignal Push</div>
+                <div class="flow-step">Rider Notification</div>
+            </div>
+        </section>
+
+        <section id="flows">
+            <h2>6. 🔄 Diagramas de Flujo</h2>
+            
+            <h3>6.1 Flujo de Inicialización de la App</h3>
+            <div class="flow-diagram">
+                <div class="flow-step">App Launch</div>
+                <div class="flow-step">Firebase Init</div>
+                <div class="flow-step">OneSignal Setup</div>
+                <div class="flow-step">MQTT Connect</div>
+                <div class="flow-step">User Auth Check</div>
+                <div class="flow-step">Dashboard/Login</div>
+            </div>
+
+            <h3>6.2 Flujo de Manejo de Viajes</h3>
+            <div class="flow-diagram">
+                <div class="flow-step">New Ride Request</div>
+                <div class="flow-step">MQTT Message</div>
+                <div class="flow-step">Show Request Dialog</div>
+                <div class="flow-step">Driver Decision</div>
+                <div class="flow-step">Accept/Reject</div>
+                <div class="flow-step">Update Status</div>
+                <div class="flow-step">Navigate to Ride</div>
+            </div>
+
+            <h3>6.3 Flujo de Notificaciones Push</h3>
+            <div class="flow-diagram">
+                <div class="flow-step">Server Event</div>
+                <div class="flow-step">OneSignal API</div>
+                <div class="flow-step">Push Notification</div>
+                <div class="flow-step">App Foreground/Background</div>
+                <div class="flow-step">Handle Notification</div>
+                <div class="flow-step">Update UI</div>
+            </div>
+        </section>
+
+        <section id="security">
+            <h2>7. 🔒 Consideraciones de Seguridad</h2>
+            
+            <div class="warning-box">
+                <strong>⚠️ Importante:</strong> Las claves API mostradas en esta documentación son para propósitos de desarrollo. En producción, estas claves deben ser manejadas de forma segura.
+            </div>
+
+            <h3>7.1 Firebase Security</h3>
+            <ul>
+                <li><strong>Firebase Auth:</strong> Autenticación de usuarios con tokens JWT</li>
+                <li><strong>Firebase Rules:</strong> Reglas de seguridad para Firestore y Realtime Database</li>
+                <li><strong>Crashlytics:</strong> Monitoreo de errores sin exponer datos sensibles</li>
+            </ul>
+
+            <h3>7.2 OneSignal Security</h3>
+            <ul>
+                <li><strong>Rest Key:</strong> Usado para enviar notificaciones desde el servidor</li>
+                <li><strong>App ID:</strong> Identificador público de la aplicación</li>
+                <li><strong>Player IDs:</strong> Identificadores únicos de dispositivos</li>
+            </ul>
+
+            <h3>7.3 MQTT Security</h3>
+            <ul>
+                <li><strong>Broker Público:</strong> HiveMQ es un broker público, considerar migración a broker privado</li>
+                <li><strong>Topics:</strong> Usar topics específicos por usuario para evitar acceso no autorizado</li>
+                <li><strong>SSL/TLS:</strong> Considerar implementar conexiones seguras</li>
+            </ul>
+        </section>
+
+        <section id="troubleshooting">
+            <h2>8. 🔧 Solución de Problemas</h2>
+            
+            <h3>8.1 Problemas Comunes de Firebase</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Problema</th>
+                        <th>Solución</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Error de inicialización</td>
+                        <td>Verificar google-services.json y GoogleService-Info.plist</td>
+                    </tr>
+                    <tr>
+                        <td>Error de autenticación</td>
+                        <td>Verificar configuración de OAuth en Firebase Console</td>
+                    </tr>
+                    <tr>
+                        <td>Crashlytics no funciona</td>
+                        <td>Verificar que FlutterError.onError esté configurado</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>8.2 Problemas Comunes de OneSignal</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Problema</th>
+                        <th>Solución</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Notificaciones no llegan</td>
+                        <td>Verificar App ID y permisos de notificación</td>
+                    </tr>
+                    <tr>
+                        <td>Error de Player ID</td>
+                        <td>Regenerar Player ID o reinstalar la app</td>
+                    </tr>
+                    <tr>
+                        <td>Notificaciones en iOS</td>
+                        <td>Verificar configuración de certificados APNS</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>8.3 Problemas Comunes de MQTT</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Problema</th>
+                        <th>Solución</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>No se conecta al broker</td>
+                        <td>Verificar conectividad de red y configuración del broker</td>
+                    </tr>
+                    <tr>
+                        <td>Mensajes no llegan</td>
+                        <td>Verificar topics suscritos y QoS</td>
+                    </tr>
+                    <tr>
+                        <td>Conexión inestable</td>
+                        <td>Implementar reconexión automática y keep-alive</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>8.4 Comandos de Depuración</h3>
+            <div class="code-block">
+# Limpiar cache de Flutter
+flutter clean
+flutter pub get
+
+# Verificar dependencias
+flutter doctor
+
+# Ejecutar en modo debug
+flutter run --debug
+
+# Ver logs de Firebase
+firebase crashlytics:log
+
+# Verificar conexión MQTT
+mosquitto_sub -h broker.hivemq.com -t "test/topic"
+            </div>
+        </section>
+
+        <div class="success-box">
+            <h3>✅ Resumen de Configuración</h3>
+            <p>La aplicación Blaze Driver está correctamente configurada con:</p>
+            <ul>
+                <li><strong>Firebase:</strong> Autenticación, base de datos y crashlytics funcionando</li>
+                <li><strong>OneSignal:</strong> Notificaciones push configuradas para conductores</li>
+                <li><strong>MQTT:</strong> Comunicación en tiempo real con broker HiveMQ</li>
+                <li><strong>Sentry:</strong> Monitoreo de errores adicional</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding: 20px; border-top: 2px solid #3498db;">
+            <p><strong>Documentación generada para Blaze Driver</strong></p>
+            <p>Versión 1.1.8+12 | Diciembre 2024</p>
+        </div>
+    </div>
+</body>
+</html> 

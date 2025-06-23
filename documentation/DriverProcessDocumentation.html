@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación del Proceso del Conductor - Blaze Rides</title>
+    <style>
+        /* Copiar el CSS de TaxiProcessDocumentation.html para mantener el mismo diseño */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background-color: #f8f9fa; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; background-color: white; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        .header { text-align: center; padding: 40px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px; margin-bottom: 30px; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.2em; opacity: 0.9; }
+        .section { margin-bottom: 40px; padding: 30px; border: 1px solid #e9ecef; border-radius: 8px; background-color: #fff; }
+        .section h2 { color: #495057; border-bottom: 3px solid #667eea; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.8em; }
+        .section h3 { color: #6c757d; margin: 25px 0 15px 0; font-size: 1.4em; }
+        .flow-diagram { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #667eea; }
+        .step { background: #e3f2fd; padding: 15px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #2196f3; }
+        .step h4 { color: #1976d2; margin-bottom: 8px; }
+        .code-block { background: #2d3748; color: #e2e8f0; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 15px 0; font-family: 'Courier New', monospace; }
+        .api-endpoint { background: #f0f8ff; padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #4caf50; }
+        .api-endpoint h4 { color: #2e7d32; margin-bottom: 8px; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; font-weight: bold; margin: 2px; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-accepted { background: #d1ecf1; color: #0c5460; }
+        .status-arrived { background: #d4edda; color: #155724; }
+        .status-started { background: #cce5ff; color: #004085; }
+        .status-completed { background: #d1e7dd; color: #0f5132; }
+        .status-cancelled { background: #f8d7da; color: #721c24; }
+        .table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .table th, .table td { border: 1px solid #dee2e6; padding: 12px; text-align: left; }
+        .table th { background-color: #f8f9fa; font-weight: bold; }
+        .table tr:nth-child(even) { background-color: #f8f9fa; }
+        .highlight-box { background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 5px; padding: 15px; margin: 15px 0; }
+        .warning-box { background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 5px; padding: 15px; margin: 15px 0; }
+        .success-box { background: #d4edda; border: 1px solid #c3e6cb; border-radius: 5px; padding: 15px; margin: 15px 0; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .card { background: #fff; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .card h4 { color: #495057; margin-bottom: 15px; border-bottom: 2px solid #667eea; padding-bottom: 8px; }
+        .toc { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+        .toc h3 { margin-bottom: 15px; color: #495057; }
+        .toc ul { list-style: none; }
+        .toc li { margin: 8px 0; }
+        .toc a { color: #667eea; text-decoration: none; padding: 5px 0; display: block; }
+        .toc a:hover { color: #764ba2; text-decoration: underline; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .metric-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; text-align: center; }
+        .metric-value { font-size: 2em; font-weight: bold; margin-bottom: 5px; }
+        .metric-label { font-size: 0.9em; opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚖 Blaze Rides</h1>
+            <p>Documentación Completa del Proceso del Conductor: Solicitud, Viaje y Cobro</p>
+        </div>
+        <div class="toc">
+            <h3>📋 Tabla de Contenidos</h3>
+            <ul>
+                <li><a href="#arquitectura">1. Arquitectura del Sistema del Conductor</a></li>
+                <li><a href="#aceptacion">2. Proceso de Aceptación de Viaje</a></li>
+                <li><a href="#navegacion">3. Navegación y Recogida</a></li>
+                <li><a href="#ejecucion">4. Ejecución del Viaje</a></li>
+                <li><a href="#finalizacion">5. Finalización y Facturación</a></li>
+                <li><a href="#pagos">6. Sistema de Cobro</a></li>
+                <li><a href="#comunicacion">7. Comunicación con el Pasajero</a></li>
+                <li><a href="#incidentes">8. Gestión de Incidentes</a></li>
+                <li><a href="#diagnostico">9. Diagnóstico del Proceso</a></li>
+                <li><a href="#backend">10. Comunicación Backend (Conductor)</a></li>
+                <li><a href="#seguridad">11. Seguridad y Validaciones del Conductor</a></li>
+                <li><a href="#tecnicas">12. Características Técnicas de la App</a></li>
+                <li><a href="#optimizaciones">13. Optimizaciones y Mejoras</a></li>
+                <li><a href="#resumen">14. Resumen Completo del Proceso</a></li>
+            </ul>
+        </div>
+        <!-- Aquí irán las secciones desarrolladas -->
+        <div id="arquitectura" class="section">
+            <h2>🏗️ Arquitectura del Sistema del Conductor</h2>
+            
+            <div class="flow-diagram">
+                <h3>Componentes Principales del Sistema del Conductor</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h4>📱 App del Conductor (Flutter)</h4>
+                        <ul>
+                            <li>Dashboard principal con mapa</li>
+                            <li>Gestión de solicitudes de viaje</li>
+                            <li>Navegación y tracking GPS</li>
+                            <li>Comunicación con pasajeros</li>
+                            <li>Gestión de pagos y cobros</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>🌐 Backend (API REST)</h4>
+                        <ul>
+                            <li>Gestión de conductores</li>
+                            <li>Procesamiento de solicitudes</li>
+                            <li>Integración de pagos</li>
+                            <li>Base de datos de viajes</li>
+                            <li>Validación de documentos</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>📡 Comunicación en Tiempo Real</h4>
+                        <ul>
+                            <li>MQTT para notificaciones</li>
+                            <li>WebSockets para chat</li>
+                            <li>GPS tracking continuo</li>
+                            <li>Actualizaciones de estado</li>
+                            <li>Alertas de emergencia</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>💳 Sistema de Cobro</h4>
+                        <ul>
+                            <li>Múltiples métodos de pago</li>
+                            <li>Wallet interno</li>
+                            <li>Comisiones automáticas</li>
+                            <li>Reportes de ganancias</li>
+                            <li>Retiros de fondos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-diagram">
+                <h3>Flujo de Datos del Conductor</h3>
+                <div class="step">
+                    <h4>1. Autenticación y Verificación</h4>
+                    <p>El conductor se autentica y el sistema valida sus documentos y estado de aprobación.</p>
+                </div>
+                <div class="step">
+                    <h4>2. Activación de Disponibilidad</h4>
+                    <p>El conductor activa su estado "en línea" y comienza a recibir solicitudes.</p>
+                </div>
+                <div class="step">
+                    <h4>3. Recepción de Solicitudes</h4>
+                    <p>El sistema envía solicitudes de viaje cercanas al conductor.</p>
+                </div>
+                <div class="step">
+                    <h4>4. Gestión del Viaje</h4>
+                    <p>El conductor acepta, navega y completa el viaje.</p>
+                </div>
+                <div class="step">
+                    <h4>5. Cobro y Finalización</h4>
+                    <p>Se procesa el pago y se registra la ganancia del conductor.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="aceptacion" class="section">
+            <h2>✅ Proceso de Aceptación de Viaje</h2>
+            
+            <div class="flow-diagram">
+                <h3>Flujo de Aceptación de Solicitud</h3>
+                
+                <div class="step">
+                    <h4>1. Recepción de Notificación</h4>
+                    <p>El conductor recibe una notificación push con los detalles del viaje solicitado.</p>
+                    <div class="code-block">
+// Ejemplo de notificación MQTT recibida
+{
+  "success_type": "new_ride_requested",
+  "result": {
+    "id": 12345,
+    "rider_name": "Juan Pérez",
+    "start_address": "Av. Principal 123",
+    "end_address": "Centro Comercial Plaza",
+    "proposed_fee": 25.50,
+    "distance": 5.2,
+    "estimated_time": 15
+  }
+}
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>2. Visualización de Detalles</h4>
+                    <p>El conductor ve los detalles completos del viaje en la interfaz.</p>
+                    <div class="api-endpoint">
+                        <h4>Endpoint: GET /api/pending-ride-request</h4>
+                        <p>Obtiene lista de solicitudes pendientes cercanas</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>3. Evaluación y Decisión</h4>
+                    <p>El conductor evalúa la distancia, tarifa y decide aceptar o rechazar.</p>
+                    <div class="highlight-box">
+                        <h4>⚠️ Tiempo de Respuesta</h4>
+                        <p>El conductor tiene 60 segundos para aceptar la solicitud antes de que expire automáticamente.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>4. Aceptación de la Solicitud</h4>
+                    <p>El conductor confirma la aceptación y se asigna al viaje.</p>
+                    <div class="api-endpoint">
+                        <h4>Endpoint: POST /api/ride-request-respond</h4>
+                        <p>Envía respuesta de aceptación o rechazo</p>
+                        <div class="code-block">
+// Request de aceptación
+{
+  "id": 12345,
+  "driver_id": 789,
+  "is_accept": "1",
+  "proposed_fee": 25.50
+}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h4>📊 Métricas de Aceptación</h4>
+                    <ul>
+                        <li><strong>Tiempo promedio de respuesta:</strong> 15-30 segundos</li>
+                        <li><strong>Porcentaje de aceptación:</strong> 85-90%</li>
+                        <li><strong>Radio de búsqueda:</strong> 5km</li>
+                        <li><strong>Filtros aplicados:</strong> Tipo de vehículo, calificación</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>🔧 Configuración del Conductor</h4>
+                    <ul>
+                        <li><strong>Estado de disponibilidad:</strong> Online/Offline</li>
+                        <li><strong>Preferencias de viaje:</strong> Distancia máxima, tarifa mínima</li>
+                        <li><strong>Horarios de trabajo:</strong> Configurables</li>
+                        <li><strong>Zonas de servicio:</strong> Áreas preferidas</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="navegacion" class="section">
+            <h2>🧭 Navegación y Recogida</h2>
+            
+            <div class="flow-diagram">
+                <h3>Proceso de Navegación al Origen</h3>
+                
+                <div class="step">
+                    <h4>1. Confirmación de Aceptación</h4>
+                    <p>Una vez aceptada la solicitud, el sistema actualiza el estado del viaje.</p>
+                    <div class="status-badge status-accepted">ACCEPTED</div>
+                </div>
+
+                <div class="step">
+                    <h4>2. Cálculo de Ruta</h4>
+                    <p>El sistema calcula la ruta óptima desde la ubicación actual del conductor hasta el origen del pasajero.</p>
+                    <div class="api-endpoint">
+                        <h4>Endpoint: POST /api/update-user-status</h4>
+                        <p>Actualiza la ubicación del conductor en tiempo real</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>3. Navegación Activa</h4>
+                    <p>El conductor sigue la ruta proporcionada por Google Maps hacia el origen.</p>
+                    <div class="code-block">
+// Actualización de ubicación cada 12 segundos
+Map req = {
+  "status": "active",
+  "latitude": driverLocation.latitude.toString(),
+  "longitude": driverLocation.longitude.toString(),
+};
+await updateStatus(req);
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>4. Llegada al Origen</h4>
+                    <p>El conductor confirma su llegada al punto de origen.</p>
+                    <div class="api-endpoint">
+                        <h4>Endpoint: POST /api/riderequest-update/{rideId}</h4>
+                        <p>Actualiza el estado del viaje a "ARRIVING"</p>
+                        <div class="code-block">
+// Request de llegada
+{
+  "id": 12345,
+  "status": "arriving"
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>5. Confirmación de Llegada</h4>
+                    <p>El conductor confirma que ha llegado al punto exacto de recogida.</p>
+                    <div class="status-badge status-arrived">ARRIVED</div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h4>🗺️ Características de Navegación</h4>
+                    <ul>
+                        <li><strong>Proveedor de mapas:</strong> Google Maps</li>
+                        <li><strong>Actualización de ubicación:</strong> Cada 12 segundos</li>
+                        <li><strong>Precisión GPS:</strong> Alta precisión</li>
+                        <li><strong>Ruta optimizada:</strong> Tiempo más corto</li>
+                        <li><strong>Tráfico en tiempo real:</strong> Sí</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>⏱️ Tiempos de Espera</h4>
+                    <ul>
+                        <li><strong>Tiempo de llegada estimado:</strong> Mostrado al pasajero</li>
+                        <li><strong>Tiempo de espera máximo:</strong> 5 minutos</li>
+                        <li><strong>Cobro por espera:</strong> Después de 2 minutos</li>
+                        <li><strong>Cancelación automática:</strong> Después de 5 minutos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="ejecucion" class="section">
+            <h2>🚗 Ejecución del Viaje</h2>
+            
+            <div class="flow-diagram">
+                <h3>Proceso de Ejecución del Viaje</h3>
+                
+                <div class="step">
+                    <h4>1. Verificación del Pasajero</h4>
+                    <p>El conductor verifica la identidad del pasajero mediante OTP o foto de perfil.</p>
+                    <div class="code-block">
+// Verificación OTP
+String otp = "1234"; // Código de 4 dígitos
+bool isValid = await verifyOTP(rideId, otp);
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>2. Inicio del Viaje</h4>
+                    <p>El conductor confirma que el pasajero está en el vehículo y inicia el viaje.</p>
+                    <div class="api-endpoint">
+                        <h4>Endpoint: POST /api/riderequest-update/{rideId}</h4>
+                        <p>Actualiza el estado del viaje a "IN_PROGRESS"</p>
+                        <div class="code-block">
+// Request de inicio de viaje
+{
+  "id": 12345,
+  "status": "in_progress"
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>3. Navegación al Destino</h4>
+                    <p>El conductor navega hacia el destino final del pasajero.</p>
+                    <div class="status-badge status-started">IN_PROGRESS</div>
+                </div>
+
+                <div class="step">
+                    <h4>4. Tracking en Tiempo Real</h4>
+                    <p>El sistema rastrea la ubicación del vehículo durante todo el viaje.</p>
+                    <div class="highlight-box">
+                        <h4>📍 Tracking Continuo</h4>
+                        <p>La ubicación se actualiza cada 12 segundos y se comparte con el pasajero en tiempo real.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>5. Llegada al Destino</h4>
+                    <p>El conductor llega al destino y confirma la finalización del viaje.</p>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h4>📱 Funcionalidades Durante el Viaje</h4>
+                    <ul>
+                        <li><strong>Chat en tiempo real:</strong> Comunicación con el pasajero</li>
+                        <li><strong>Llamadas:</strong> Integración con teléfono</li>
+                        <li><strong>Navegación:</strong> Google Maps integrado</li>
+                        <li><strong>Tracking:</strong> Ubicación en tiempo real</li>
+                        <li><strong>Emergencias:</strong> Botón SOS</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>🔒 Seguridad Durante el Viaje</h4>
+                    <ul>
+                        <li><strong>Verificación de identidad:</strong> OTP obligatorio</li>
+                        <li><strong>Tracking continuo:</strong> Ubicación registrada</li>
+                        <li><strong>Botón de emergencia:</strong> SOS integrado</li>
+                        <li><strong>Compartir viaje:</strong> Con contactos de emergencia</li>
+                        <li><strong>Grabación de audio:</strong> Opcional</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="finalizacion" class="section">
+            <h2>🏁 Finalización y Facturación</h2>
+            
+            <div class="flow-diagram">
+                <h3>Proceso de Finalización del Viaje</h3>
+                
+                <div class="step">
+                    <h4>1. Llegada al Destino</h4>
+                    <p>El conductor llega al destino final y confirma la llegada.</p>
+                    <div class="status-badge status-completed">ARRIVED_AT_DESTINATION</div>
+                </div>
+
+                <div class="step">
+                    <h4>2. Cálculo de Tarifa Final</h4>
+                    <p>El sistema calcula la tarifa final basada en distancia, tiempo y cargos adicionales.</p>
+                    <div class="api-endpoint">
+                        <h4>Endpoint: POST /api/complete-riderequest</h4>
+                        <p>Finaliza el viaje y calcula la tarifa</p>
+                        <div class="code-block">
+// Request de finalización
+{
+  "id": 12345,
+  "service_id": 1,
+  "end_latitude": -12.3456,
+  "end_longitude": -78.9012,
+  "end_address": "Destino Final",
+  "distance": 5.2,
+  "extra_charges": [],
+  "extra_charges_amount": 0
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>3. Confirmación de Finalización</h4>
+                    <p>El conductor confirma que el viaje ha sido completado exitosamente.</p>
+                    <div class="status-badge status-completed">COMPLETED</div>
+                </div>
+
+                <div class="step">
+                    <h4>4. Generación de Recibo</h4>
+                    <p>El sistema genera un recibo detallado con todos los cargos.</p>
+                    <div class="code-block">
+// Estructura del recibo
+{
+  "ride_id": 12345,
+  "driver_name": "Carlos López",
+  "rider_name": "Juan Pérez",
+  "start_address": "Origen",
+  "end_address": "Destino",
+  "distance": 5.2,
+  "duration": 15,
+  "base_fare": 20.00,
+  "distance_charge": 5.20,
+  "time_charge": 3.75,
+  "extra_charges": 0,
+  "total_amount": 28.95
+}
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h4>💰 Componentes de la Tarifa</h4>
+                    <ul>
+                        <li><strong>Tarifa base:</strong> $20.00</li>
+                        <li><strong>Cargo por distancia:</strong> $1.00/km</li>
+                        <li><strong>Cargo por tiempo:</strong> $0.25/min</li>
+                        <li><strong>Cargos adicionales:</strong> Variables</li>
+                        <li><strong>Descuentos:</strong> Cupones aplicados</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>📊 Métricas de Finalización</h4>
+                    <ul>
+                        <li><strong>Tiempo promedio de viaje:</strong> 15-20 minutos</li>
+                        <li><strong>Distancia promedio:</strong> 5-8 km</li>
+                        <li><strong>Tarifa promedio:</strong> $25-35</li>
+                        <li><strong>Porcentaje de completación:</strong> 95%</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="pagos" class="section">
+            <h2>💳 Sistema de Cobro</h2>
+            
+            <div class="flow-diagram">
+                <h3>Proceso de Cobro y Pago</h3>
+                
+                <div class="step">
+                    <h4>1. Selección del Método de Pago</h4>
+                    <p>El conductor confirma el método de pago seleccionado por el pasajero.</p>
+                    <div class="code-block">
+// Métodos de pago disponibles
+enum PaymentMethod {
+  cash,      // Efectivo
+  card,      // Tarjeta de crédito/débito
+  wallet,    // Wallet interno
+  online     // Pago en línea
+}
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>2. Procesamiento del Pago</h4>
+                    <p>El sistema procesa el pago según el método seleccionado.</p>
+                    <div class="api-endpoint">
+                        <h4>Endpoint: GET /api/current-riderequest</h4>
+                        <p>Obtiene detalles del viaje y estado del pago</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>3. Cobro en Efectivo</h4>
+                    <p>Si el pago es en efectivo, el conductor cobra directamente al pasajero.</p>
+                    <div class="highlight-box">
+                        <h4>💵 Cobro en Efectivo</h4>
+                        <p>El conductor debe cobrar la cantidad exacta y confirmar el cobro en la aplicación.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>4. Procesamiento de Tarjeta</h4>
+                    <p>Para pagos con tarjeta, se procesa automáticamente a través de Stripe/Flutterwave.</p>
+                    <div class="code-block">
+// Procesamiento de tarjeta
+{
+  "payment_type": "card",
+  "amount": 28.95,
+  "currency": "USD",
+  "stripe_token": "tok_visa",
+  "ride_id": 12345
+}
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>5. Confirmación de Pago</h4>
+                    <p>El sistema confirma que el pago ha sido procesado exitosamente.</p>
+                    <div class="status-badge status-completed">PAYMENT_PROCESSED</div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h4>💳 Métodos de Pago Soportados</h4>
+                    <ul>
+                        <li><strong>Efectivo:</strong> Cobro directo al pasajero</li>
+                        <li><strong>Tarjeta de crédito:</strong> Stripe/Flutterwave</li>
+                        <li><strong>Tarjeta de débito:</strong> Stripe/Flutterwave</li>
+                        <li><strong>Wallet interno:</strong> Saldo de la aplicación</li>
+                        <li><strong>Transferencia bancaria:</strong> Integración bancaria</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>💰 Gestión de Propinas</h4>
+                    <ul>
+                        <li><strong>Propinas sugeridas:</strong> 10%, 15%, 20%</li>
+                        <li><strong>Propina personalizada:</strong> Monto libre</li>
+                        <li><strong>Propina en efectivo:</strong> Directa al conductor</li>
+                        <li><strong>Propina digital:</strong> Procesada por la app</li>
+                        <li><strong>Reporte de propinas:</strong> En el dashboard</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <h4>✅ Ventajas del Sistema de Cobro</h4>
+                <ul>
+                    <li>Múltiples opciones de pago para mayor flexibilidad</li>
+                    <li>Procesamiento seguro con encriptación SSL</li>
+                    <li>Confirmación automática de pagos</li>
+                    <li>Reportes detallados de transacciones</li>
+                    <li>Integración con sistemas contables</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="comunicacion" class="section">
+            <h2>💬 Comunicación con el Pasajero</h2>
+            
+            <div class="flow-diagram">
+                <h3>Sistema de Comunicación en Tiempo Real</h3>
+                
+                <div class="step">
+                    <h4>1. Chat en Tiempo Real</h4>
+                    <p>El conductor puede comunicarse con el pasajero mediante chat integrado.</p>
+                    <div class="api-endpoint">
+                        <h4>Endpoint: WebSocket /chat/{rideId}</h4>
+                        <p>Conexión WebSocket para chat en tiempo real</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>2. Llamadas Telefónicas</h4>
+                    <p>El conductor puede realizar llamadas directas al pasajero.</p>
+                    <div class="code-block">
+// Integración con teléfono
+Future<void> callRider(String phoneNumber) async {
+  final Uri phoneUri = Uri(scheme: "tel", path: phoneNumber);
+  if (await canLaunchUrl(phoneUri)) {
+    await launchUrl(phoneUri);
+  }
+}
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>3. Notificaciones Push</h4>
+                    <p>El sistema envía notificaciones automáticas sobre el estado del viaje.</p>
+                    <div class="code-block">
+// Tipos de notificaciones
+enum NotificationType {
+  driver_arriving,    // Conductor llegando
+  driver_arrived,     // Conductor llegó
+  ride_started,       // Viaje iniciado
+  ride_completed,     // Viaje completado
+  payment_received    // Pago recibido
+}
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>4. Mensajes Predefinidos</h4>
+                    <p>El conductor puede usar mensajes rápidos predefinidos.</p>
+                    <div class="highlight-box">
+                        <h4>📝 Mensajes Rápidos</h4>
+                        <ul>
+                            <li>"Estoy llegando en 2 minutos"</li>
+                            <li>"Ya llegué al punto de recogida"</li>
+                            <li>"¿En qué puerta te encuentras?"</li>
+                            <li>"Viaje completado, gracias"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h4>📱 Características del Chat</h4>
+                    <ul>
+                        <li><strong>Mensajes en tiempo real:</strong> WebSocket</li>
+                        <li><strong>Historial de conversación:</strong> Guardado</li>
+                        <li><strong>Mensajes de voz:</strong> Opcional</li>
+                        <li><strong>Emojis y stickers:</strong> Soportados</li>
+                        <li><strong>Traducción automática:</strong> Múltiples idiomas</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>📞 Funciones de Llamada</h4>
+                    <ul>
+                        <li><strong>Llamadas directas:</strong> Integración nativa</li>
+                        <li><strong>Número enmascarado:</strong> Privacidad</li>
+                        <li><strong>Grabación de llamadas:</strong> Opcional</li>
+                        <li><strong>Llamadas de emergencia:</strong> SOS</li>
+                        <li><strong>Historial de llamadas:</strong> Registrado</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="incidentes" class="section">
+            <h2>🚨 Gestión de Incidentes</h2>
+            
+            <div class="flow-diagram">
+                <h3>Proceso de Gestión de Incidentes</h3>
+                
+                <div class="step">
+                    <h4>1. Detección de Incidente</h4>
+                    <p>El conductor puede reportar incidentes durante el viaje.</p>
+                    <div class="api-endpoint">
+                        <h4>Endpoint: POST /api/save-complaint</h4>
+                        <p>Reporta incidentes o quejas</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>2. Botón de Emergencia (SOS)</h4>
+                    <p>El conductor puede activar el botón SOS en caso de emergencia.</p>
+                    <div class="api-endpoint">
+                        <h4>Endpoint: POST /api/admin-sos-notify</h4>
+                        <p>Notifica emergencias al administrador</p>
+                        <div class="code-block">
+// Request de emergencia
+{
+  "ride_id": 12345,
+  "driver_id": 789,
+  "emergency_type": "safety_concern",
+  "location": {
+    "latitude": -12.3456,
+    "longitude": -78.9012
+  },
+  "description": "Situación de emergencia"
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>3. Cancelación de Viaje</h4>
+                    <p>El conductor puede cancelar el viaje por motivos válidos.</p>
+                    <div class="warning-box">
+                        <h4>⚠️ Motivos de Cancelación Válidos</h4>
+                        <ul>
+                            <li>Pasajero no aparece en el punto de recogida</li>
+                            <li>Problemas de seguridad</li>
+                            <li>Vehículo con problemas mecánicos</li>
+                            <li>Emergencia personal del conductor</li>
+                            <li>Condiciones climáticas extremas</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>4. Reporte de Problemas</h4>
+                    <p>El conductor puede reportar problemas técnicos o de servicio.</p>
+                    <div class="code-block">
+// Tipos de incidentes
+enum IncidentType {
+  passenger_no_show,      // Pasajero no aparece
+  safety_concern,         // Preocupación de seguridad
+  vehicle_issue,          // Problema con el vehículo
+  payment_issue,          // Problema de pago
+  technical_issue,        // Problema técnico
+  other                   // Otro
+}
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h4>🆘 Sistema de Emergencias</h4>
+                    <ul>
+                        <li><strong>Botón SOS:</strong> Acceso rápido</li>
+                        <li><strong>Notificación automática:</strong> A administradores</li>
+                        <li><strong>Ubicación en tiempo real:</strong> GPS activo</li>
+                        <li><strong>Contactos de emergencia:</strong> Configurables</li>
+                        <li><strong>Respuesta inmediata:</strong> 24/7</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>📋 Gestión de Quejas</h4>
+                    <ul>
+                        <li><strong>Formulario de queja:</strong> Detallado</li>
+                        <li><strong>Evidencia adjunta:</strong> Fotos/videos</li>
+                        <li><strong>Seguimiento:</strong> Estado de resolución</li>
+                        <li><strong>Respuesta del soporte:</strong> En 24 horas</li>
+                        <li><strong>Historial de incidentes:</strong> Registrado</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <h4>✅ Protocolos de Seguridad</h4>
+                <ul>
+                    <li>Verificación de identidad obligatoria</li>
+                    <li>Tracking GPS continuo durante el viaje</li>
+                    <li>Botón SOS accesible en todo momento</li>
+                    <li>Contactos de emergencia configurados</li>
+                    <li>Respuesta inmediata del soporte técnico</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="diagnostico" class="section">
+            <h2>🔍 Diagnóstico del Proceso del Conductor</h2>
+            
+            <div class="flow-diagram">
+                <h3>Análisis de la Implementación Actual</h3>
+                
+                <div class="step">
+                    <h4>✅ Fortalezas Identificadas</h4>
+                    <div class="success-box">
+                        <ul>
+                            <li><strong>Sistema MQTT robusto:</strong> Comunicación en tiempo real efectiva</li>
+                            <li><strong>Tracking GPS continuo:</strong> Actualización cada 12 segundos</li>
+                            <li><strong>Múltiples métodos de pago:</strong> Flexibilidad para el conductor</li>
+                            <li><strong>Interfaz intuitiva:</strong> Dashboard bien diseñado</li>
+                            <li><strong>Sistema de emergencias:</strong> Botón SOS funcional</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>⚠️ Áreas de Mejora</h4>
+                    <div class="warning-box">
+                        <ul>
+                            <li><strong>Timeout de aceptación:</strong> 60 segundos puede ser muy corto</li>
+                            <li><strong>Falta de notificaciones push:</strong> Mejorar alertas</li>
+                            <li><strong>Gestón de documentos:</strong> Proceso manual</li>
+                            <li><strong>Reportes de ganancias:</strong> Limitados</li>
+                            <li><strong>Integración de mapas:</strong> Solo Google Maps</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>🔧 Recomendaciones Técnicas</h4>
+                    <div class="highlight-box">
+                        <ul>
+                            <li>Implementar notificaciones push más robustas</li>
+                            <li>Agregar múltiples proveedores de mapas</li>
+                            <li>Mejorar el sistema de reportes</li>
+                            <li>Optimizar el consumo de batería</li>
+                            <li>Implementar modo offline mejorado</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h4>📊 Métricas de Rendimiento</h4>
+                    <ul>
+                        <li><strong>Tiempo de respuesta promedio:</strong> 15-30 segundos</li>
+                        <li><strong>Porcentaje de aceptación:</strong> 85-90%</li>
+                        <li><strong>Tiempo de viaje promedio:</strong> 15-20 minutos</li>
+                        <li><strong>Calificación promedio:</strong> 4.5/5</li>
+                        <li><strong>Uptime del sistema:</strong> 99.5%</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>🎯 Objetivos de Mejora</h4>
+                    <ul>
+                        <li><strong>Reducir tiempo de respuesta:</strong> A 10-15 segundos</li>
+                        <li><strong>Aumentar aceptación:</strong> A 95%</li>
+                        <li><strong>Mejorar calificación:</strong> A 4.8/5</li>
+                        <li><strong>Reducir cancelaciones:</strong> A menos del 5%</li>
+                        <li><strong>Aumentar ganancias:</strong> 20% más por hora</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="backend" class="section">
+            <h2>🌐 Comunicación Backend (Conductor)</h2>
+            
+            <div class="flow-diagram">
+                <h3>APIs Específicas del Conductor</h3>
+                
+                <div class="step">
+                    <h4>1. Gestión de Estado del Conductor</h4>
+                    <div class="api-endpoint">
+                        <h4>Endpoint: POST /api/update-user-status</h4>
+                        <p>Actualiza el estado de disponibilidad y ubicación</p>
+                        <div class="code-block">
+// Request de actualización de estado
+{
+  "status": "active",
+  "is_online": 1,
+  "latitude": "-12.3456",
+  "longitude": "-78.9012"
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>2. Gestión de Solicitudes de Viaje</h4>
+                    <div class="api-endpoint">
+                        <h4>Endpoint: GET /api/pending-ride-request</h4>
+                        <p>Obtiene solicitudes pendientes cercanas</p>
+                        <div class="code-block">
+// Parámetros de búsqueda
+{
+  "latitude": "-12.3456",
+  "longitude": "-78.9012",
+  "radius": 5000,  // 5km
+  "vehicle_type": "standard"
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>3. Aceptación de Solicitudes</h4>
+                    <div class="api-endpoint">
+                        <h4>Endpoint: POST /api/ride-request-respond</h4>
+                        <p>Responde a una solicitud de viaje</p>
+                        <div class="code-block">
+// Request de aceptación
+{
+  "id": 12345,
+  "driver_id": 789,
+  "is_accept": "1",
+  "proposed_fee": 25.50
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>4. Actualización de Estado del Viaje</h4>
+                    <div class="api-endpoint">
+                        <h4>Endpoint: POST /api/riderequest-update/{rideId}</h4>
+                        <p>Actualiza el estado del viaje</p>
+                        <div class="code-block">
+// Estados posibles
+{
+  "id": 12345,
+  "status": "arriving" | "arrived" | "in_progress" | "completed"
+}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table">
+                <h3>Resumen de Endpoints del Conductor</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Método</th>
+                            <th>Descripción</th>
+                            <th>Frecuencia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>/api/update-user-status</td>
+                            <td>POST</td>
+                            <td>Actualizar ubicación y estado</td>
+                            <td>Cada 12 segundos</td>
+                        </tr>
+                        <tr>
+                            <td>/api/pending-ride-request</td>
+                            <td>GET</td>
+                            <td>Obtener solicitudes pendientes</td>
+                            <td>Cada 30 segundos</td>
+                        </tr>
+                        <tr>
+                            <td>/api/ride-request-respond</td>
+                            <td>POST</td>
+                            <td>Aceptar/rechazar solicitud</td>
+                            <td>Por solicitud</td>
+                        </tr>
+                        <tr>
+                            <td>/api/riderequest-update</td>
+                            <td>POST</td>
+                            <td>Actualizar estado del viaje</td>
+                            <td>Por cambio de estado</td>
+                        </tr>
+                        <tr>
+                            <td>/api/complete-riderequest</td>
+                            <td>POST</td>
+                            <td>Finalizar viaje</td>
+                            <td>Al finalizar</td>
+                        </tr>
+                        <tr>
+                            <td>/api/save-complaint</td>
+                            <td>POST</td>
+                            <td>Reportar incidente</td>
+                            <td>Cuando sea necesario</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h4>📡 Comunicación MQTT</h4>
+                    <ul>
+                        <li><strong>Topic de notificaciones:</strong> new_ride_request_{driverId}</li>
+                        <li><strong>Topic de estado:</strong> ride_request_status_{driverId}</li>
+                        <li><strong>Frecuencia de conexión:</strong> Mantenida</li>
+                        <li><strong>Reconexión automática:</strong> Sí</li>
+                        <li><strong>QoS:</strong> At least once</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>🔒 Seguridad de APIs</h4>
+                    <ul>
+                        <li><strong>Autenticación:</strong> JWT Token</li>
+                        <li><strong>Autorización:</strong> Role-based</li>
+                        <li><strong>Rate limiting:</strong> Implementado</li>
+                        <li><strong>Encriptación:</strong> HTTPS/TLS</li>
+                        <li><strong>Validación:</strong> Input sanitization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="seguridad" class="section">
+            <h2>🔒 Seguridad y Validaciones del Conductor</h2>
+            
+            <div class="flow-diagram">
+                <h3>Sistema de Seguridad Integral</h3>
+                
+                <div class="step">
+                    <h4>1. Verificación de Documentos</h4>
+                    <p>El conductor debe subir y verificar documentos obligatorios.</p>
+                    <div class="api-endpoint">
+                        <h4>Endpoint: POST /api/driver-document-save</h4>
+                        <p>Subir documentos del conductor</p>
+                        <div class="code-block">
+// Documentos requeridos
+{
+  "driver_id": 789,
+  "document_id": 1,  // Licencia de conducir
+  "is_verified": 0,
+  "driver_document": File
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>2. Verificación de Identidad</h4>
+                    <p>Proceso de verificación biométrica y de identidad.</p>
+                    <div class="highlight-box">
+                        <h4>🆔 Verificaciones Requeridas</h4>
+                        <ul>
+                            <li>Licencia de conducir válida</li>
+                            <li>Seguro del vehículo</li>
+                            <li>Verificación de antecedentes</li>
+                            <li>Foto de perfil verificada</li>
+                            <li>Verificación de teléfono</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>3. Monitoreo de Comportamiento</h4>
+                    <p>Sistema de monitoreo continuo del comportamiento del conductor.</p>
+                    <div class="code-block">
+// Métricas de comportamiento
+{
+  "driver_id": 789,
+  "rating": 4.5,
+  "cancellation_rate": 0.05,
+  "response_time": 15,
+  "safety_score": 95,
+  "completion_rate": 0.98
+}
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>4. Seguridad Durante el Viaje</h4>
+                    <p>Mecanismos de seguridad activos durante el servicio.</p>
+                    <div class="warning-box">
+                        <h4>🚨 Protocolos de Seguridad</h4>
+                        <ul>
+                            <li>Tracking GPS continuo</li>
+                            <li>Botón SOS accesible</li>
+                            <li>Verificación OTP obligatoria</li>
+                            <li>Compartir ubicación con contactos</li>
+                            <li>Grabación de audio opcional</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h4>📋 Documentos Requeridos</h4>
+                    <ul>
+                        <li><strong>Licencia de conducir:</strong> Válida y vigente</li>
+                        <li><strong>Seguro del vehículo:</strong> Cobertura completa</li>
+                        <li><strong>Verificación de antecedentes:</strong> Sin delitos</li>
+                        <li><strong>Foto de perfil:</strong> Clara y actual</li>
+                        <li><strong>Verificación de teléfono:</strong> SMS/OTP</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>🔍 Proceso de Verificación</h4>
+                    <ul>
+                        <li><strong>Revisión manual:</strong> Por administradores</li>
+                        <li><strong>Verificación automática:</strong> OCR de documentos</li>
+                        <li><strong>Validación de datos:</strong> Contra bases oficiales</li>
+                        <li><strong>Entrevista:</strong> Opcional</li>
+                        <li><strong>Período de prueba:</strong> 30 días</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="tecnicas" class="section">
+            <h2>⚙️ Características Técnicas de la App</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>📱 Frontend (Flutter)</h4>
+                    <ul>
+                        <li><strong>Framework:</strong> Flutter 3.x</li>
+                        <li><strong>Lenguaje:</strong> Dart</li>
+                        <li><strong>Estado:</strong> Provider/Riverpod</li>
+                        <li><strong>Navegación:</strong> GoRouter</li>
+                        <li><strong>HTTP:</strong> Dio/Retrofit</li>
+                        <li><strong>MQTT:</strong> mqtt_client</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>🌐 Backend</h4>
+                    <ul>
+                        <li><strong>API:</strong> RESTful</li>
+                        <li><strong>Base de Datos:</strong> PostgreSQL</li>
+                        <li><strong>Cache:</strong> Redis</li>
+                        <li><strong>MQTT:</strong> Mosquitto</li>
+                        <li><strong>Pagos:</strong> Stripe, Flutterwave</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>🗺️ Mapas y Ubicación</h4>
+                    <ul>
+                        <li><strong>Proveedor:</strong> Google Maps</li>
+                        <li><strong>Geocoding:</strong> Google Places API</li>
+                        <li><strong>Tracking:</strong> GPS + Network</li>
+                        <li><strong>Optimización:</strong> Ruta más rápida</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>📊 Monitoreo</h4>
+                    <ul>
+                        <li><strong>Logs:</strong> ELK Stack</li>
+                        <li><strong>Métricas:</strong> Prometheus</li>
+                        <li><strong>Alertas:</strong> Grafana</li>
+                        <li><strong>APM:</strong> New Relic</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flow-diagram">
+                <h3>Arquitectura Técnica Detallada</h3>
+                <div class="step">
+                    <h4>🔧 Componentes Principales</h4>
+                    <div class="code-block">
+// Estructura de la aplicación
+lib/
+├── main.dart                 // Punto de entrada
+├── screens/                  // Pantallas de la app
+│   ├── DriverDashboardScreen.dart
+│   ├── LoginScreen.dart
+│   └── ...
+├── model/                    // Modelos de datos
+│   ├── CurrentRequestModel.dart
+│   ├── RideRequestList.dart
+│   └── ...
+├── network/                  // Capa de red
+│   ├── RestApis.dart
+│   └── NetworkUtils.dart
+├── Services/                 // Servicios
+│   ├── AuthService.dart
+│   ├── NotificationService.dart
+│   └── ...
+└── utils/                    // Utilidades
+    ├── Constants.dart
+    ├── Common.dart
+    └── ...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="optimizaciones" class="section">
+            <h2>🚀 Optimizaciones y Mejoras</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>⚡ Optimizaciones Técnicas</h4>
+                    <ul>
+                        <li>Implementar cache inteligente</li>
+                        <li>Optimizar consultas de base de datos</li>
+                        <li>Comprimir respuestas API</li>
+                        <li>Lazy loading de componentes</li>
+                        <li>Optimizar imágenes y assets</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>👥 Mejoras de UX</h4>
+                    <ul>
+                        <li>Interfaz más intuitiva</li>
+                        <li>Animaciones fluidas</li>
+                        <li>Modo offline mejorado</li>
+                        <li>Accesibilidad (WCAG)</li>
+                        <li>Personalización de tema</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>🔒 Mejoras de Seguridad</h4>
+                    <ul>
+                        <li>Autenticación biométrica</li>
+                        <li>Verificación de identidad</li>
+                        <li>Encriptación end-to-end</li>
+                        <li>Auditoría de seguridad</li>
+                        <li>Compliance GDPR</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>📈 Escalabilidad</h4>
+                    <ul>
+                        <li>Microservicios</li>
+                        <li>Load balancing</li>
+                        <li>CDN global</li>
+                        <li>Auto-scaling</li>
+                        <li>Multi-región</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h4>🎯 Roadmap de Mejoras</h4>
+                <ul>
+                    <li><strong>Corto plazo (1-3 meses):</strong> Optimización de rendimiento y UX</li>
+                    <li><strong>Mediano plazo (3-6 meses):</strong> Nuevas funcionalidades y seguridad</li>
+                    <li><strong>Largo plazo (6-12 meses):</strong> Escalabilidad y expansión</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="resumen" class="section">
+            <h2>📋 Resumen Completo del Proceso del Conductor</h2>
+            
+            <div class="flow-diagram">
+                <h3>Flujo End-to-End del Conductor</h3>
+                
+                <div class="step">
+                    <h4>🎯 Inicio del Proceso</h4>
+                    <p>El conductor activa su disponibilidad y comienza a recibir solicitudes</p>
+                </div>
+
+                <div class="step">
+                    <h4>📱 Recepción de Solicitudes</h4>
+                    <p>El sistema envía notificaciones de solicitudes cercanas al conductor</p>
+                </div>
+
+                <div class="step">
+                    <h4>✅ Aceptación</h4>
+                    <p>El conductor evalúa y acepta la solicitud de viaje</p>
+                </div>
+
+                <div class="step">
+                    <h4>🧭 Navegación</h4>
+                    <p>El conductor navega hacia el punto de recogida del pasajero</p>
+                </div>
+
+                <div class="step">
+                    <h4>👤 Recogida</h4>
+                    <p>El conductor confirma llegada y recoge al pasajero</p>
+                </div>
+
+                <div class="step">
+                    <h4>🚗 Viaje</h4>
+                    <p>El conductor realiza el viaje hacia el destino</p>
+                </div>
+
+                <div class="step">
+                    <h4>🏁 Finalización</h4>
+                    <p>El conductor confirma llegada y finaliza el viaje</p>
+                </div>
+
+                <div class="step">
+                    <h4>💳 Cobro</h4>
+                    <p>El conductor cobra el pago y recibe su comisión</p>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <h4>✅ Proceso Optimizado</h4>
+                <p>El sistema del conductor está diseñado para proporcionar una experiencia fluida y eficiente, con comunicación en tiempo real, múltiples opciones de pago y herramientas de seguridad para garantizar un servicio de calidad.</p>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">8</div>
+                    <div class="metric-label">Pasos del Proceso</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Métodos de Pago</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">6</div>
+                    <div class="metric-label">Estados del Viaje</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">24/7</div>
+                    <div class="metric-label">Disponibilidad</div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h4>📊 Métricas Clave del Conductor</h4>
+                    <ul>
+                        <li><strong>Ganancias promedio por hora:</strong> $25-35</li>
+                        <li><strong>Viajes completados por día:</strong> 15-20</li>
+                        <li><strong>Calificación promedio:</strong> 4.5/5</li>
+                        <li><strong>Tiempo de respuesta:</strong> 15-30 segundos</li>
+                        <li><strong>Porcentaje de aceptación:</strong> 85-90%</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>🎯 Beneficios del Sistema</h4>
+                    <ul>
+                        <li>Flexibilidad de horarios</li>
+                        <li>Ganancias competitivas</li>
+                        <li>Herramientas de seguridad</li>
+                        <li>Soporte técnico 24/7</li>
+                        <li>Oportunidades de crecimiento</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📞 Contacto y Soporte</h2>
+            <p>Para más información sobre el proceso del conductor o soporte técnico, contacte al equipo de desarrollo de Blaze Rides.</p>
+            <p><strong>Email:</strong> support@blazerides.com</p>
+            <p><strong>Documentación API:</strong> api.blazerides.com/docs</p>
+            <p><strong>Soporte Técnico:</strong> 24/7 disponible</p>
+        </div>
+    </div>
+</body>
+</html> 
