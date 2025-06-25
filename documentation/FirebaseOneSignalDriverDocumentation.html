@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación Firebase y OneSignal - Blaze Driver</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background-color: #f8f9fa; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; background-color: white; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        .header { text-align: center; padding: 40px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px; margin-bottom: 30px; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.2em; opacity: 0.9; }
+        .toc { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px; border-left: 4px solid #667eea; }
+        .toc h3 { color: #667eea; margin-bottom: 15px; }
+        .toc ul { list-style: none; }
+        .toc li { margin: 8px 0; }
+        .toc a { color: #333; text-decoration: none; font-weight: 500; }
+        .toc a:hover { color: #667eea; }
+        .section { margin-bottom: 40px; padding: 25px; border-radius: 10px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .section h2 { color: #667eea; margin-bottom: 20px; font-size: 1.8em; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+        .section h3 { color: #555; margin: 20px 0 15px 0; font-size: 1.4em; }
+        .section h4 { color: #666; margin: 15px 0 10px 0; font-size: 1.2em; }
+        .code-block { background: #f4f4f4; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #28a745; font-family: 'Courier New', monospace; overflow-x: auto; }
+        .api-endpoint { background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 15px 0; border: 2px solid #28a745; }
+        .warning { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .info { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .credential-card { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin: 10px 0; }
+        .credential-card h5 { color: #495057; margin-bottom: 10px; font-weight: 600; }
+        .credential-value { background: #e9ecef; padding: 8px; border-radius: 4px; font-family: monospace; word-break: break-all; }
+        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; margin-left: 10px; }
+        .status-valid { background: #d4edda; color: #155724; }
+        .status-invalid { background: #f8d7da; color: #721c24; }
+        .status-warning { background: #fff3cd; color: #856404; }
+        .status-empty { background: #e2e3e5; color: #383d41; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .metric-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px; text-align: center; }
+        .metric-card h3 { margin-bottom: 10px; }
+        .metric-card .number { font-size: 2em; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f8f9fa; font-weight: 600; }
+        .file-path { background: #e9ecef; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+        .flow-diagram { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #dee2e6; }
+        .step { margin: 15px 0; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #667eea; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗 Firebase y OneSignal Documentation - Driver App</h1>
+            <p>Análisis completo de configuraciones, credenciales y estado de Firebase y OneSignal en Blaze Driver</p>
+        </div>
+
+        <div class="toc">
+            <h3>📋 Tabla de Contenidos</h3>
+            <ul>
+                <li><a href="#resumen">📊 Resumen Ejecutivo</a></li>
+                <li><a href="#firebase">🔥 Configuración Firebase</a></li>
+                <li><a href="#onesignal">📱 Configuración OneSignal</a></li>
+                <li><a href="#problemas">⚠️ Problemas Identificados</a></li>
+                <li><a href="#recomendaciones">💡 Recomendaciones</a></li>
+                <li><a href="#archivos">📁 Archivos de Configuración</a></li>
+                <li><a href="#seguridad">🔒 Consideraciones de Seguridad</a></li>
+            </ul>
+        </div>
+
+        <div id="resumen" class="section">
+            <h2>📊 Resumen Ejecutivo</h2>
+            
+            <div class="grid">
+                <div class="metric-card">
+                    <h3>Firebase Project</h3>
+                    <div class="number">1</div>
+                    <p>Proyecto activo</p>
+                </div>
+                <div class="metric-card">
+                    <h3>OneSignal Apps</h3>
+                    <div class="number">1</div>
+                    <p>App ID configurado</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Problemas Críticos</h3>
+                    <div class="number">4</div>
+                    <p>Requieren atención</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Credenciales Incorrectas</h3>
+                    <div class="number">2</div>
+                    <p>Necesitan corrección</p>
+                </div>
+            </div>
+
+            <div class="info">
+                <h4>Estado General del Proyecto Driver</h4>
+                <p>La aplicación de conductores tiene una configuración básica de Firebase funcionando, pero presenta problemas críticos en OneSignal y inconsistencias en las credenciales que requieren atención inmediata para garantizar el funcionamiento correcto de las notificaciones push.</p>
+            </div>
+        </div>
+
+        <div id="firebase" class="section">
+            <h2>🔥 Configuración Firebase</h2>
+
+            <div class="success">
+                <h4>✅ Firebase Core - Configurado Correctamente</h4>
+                <p>Firebase está inicializado correctamente en <code>main.dart</code> y tiene todas las dependencias necesarias para la aplicación de conductores.</p>
+            </div>
+
+            <h3>📁 Archivos de Configuración Firebase</h3>
+            
+            <div class="credential-card">
+                <h5>Android - google-services.json (Driver)</h5>
+                <p><strong>Ubicación:</strong> <span class="file-path">android/app/google-services.json</span></p>
+                <p><strong>Estado:</strong> <span class="status-badge status-valid">VÁLIDO</span></p>
+                <div class="credential-value">
+                    <strong>Project ID:</strong> blaze-taxi-662b8<br>
+                    <strong>Project Number:</strong> 276086092198<br>
+                    <strong>API Key:</strong> AIzaSyA8zG9ZLnejAVVwCwBRa-i0eBK0YRDRCww<br>
+                    <strong>Database URL:</strong> https://blaze-taxi-662b8-default-rtdb.firebaseio.com<br>
+                    <strong>Storage Bucket:</strong> blaze-taxi-662b8.appspot.com<br>
+                    <strong>Package Name:</strong> com.isoftdesing.blazeDriver<br>
+                    <strong>App ID:</strong> 1:276086092198:android:d5d9f2dc9ed3f70acb9f67<br>
+                    <strong>Client ID:</strong> 276086092198-fcc53l7lrpe8dj0oplk6gm32cclurebs.apps.googleusercontent.com<br>
+                    <strong>Certificate Hash:</strong> e0b984883a0b998b30f7d55ac69458d994fa76e2
+                </div>
+            </div>
+
+            <div class="credential-card">
+                <h5>iOS - GoogleService-Info.plist (Driver)</h5>
+                <p><strong>Ubicación:</strong> <span class="file-path">ios/Runner/GoogleService-Info.plist</span></p>
+                <p><strong>Estado:</strong> <span class="status-badge status-warning">PROYECTO DIFERENTE</span></p>
+                <div class="credential-value">
+                    <strong>Project ID:</strong> taxi-booking-810bf<br>
+                    <strong>API Key:</strong> AIzaSyBX8XjmaGyakRzXdsWR5Ro-MH4wgBIg4gs<br>
+                    <strong>Bundle ID:</strong> com.mighty.taxidriver<br>
+                    <strong>Client ID:</strong> 522987428134-cj2e3aclddrn11h27fp1t6poebfao83q<br>
+                    <strong>App ID:</strong> 1:522987428134:ios:5a81eab57ec4ad92e809e7<br>
+                    <strong>GCM Sender ID:</strong> 522987428134
+                </div>
+                <p><strong>⚠️ ADVERTENCIA:</strong> El archivo iOS está configurado para un proyecto Firebase diferente (taxi-booking-810bf) en lugar del proyecto principal (blaze-taxi-662b8).</p>
+            </div>
+
+            <div class="credential-card">
+                <h5>Flutter - firebase_options.dart</h5>
+                <p><strong>Ubicación:</strong> <span class="file-path">lib/firebase_options.dart</span></p>
+                <p><strong>Estado:</strong> <span class="status-badge status-valid">VÁLIDO</span></p>
+                <p>Archivo generado automáticamente por FlutterFire CLI con configuraciones correctas para Android e iOS del driver app.</p>
+            </div>
+
+            <h3>🔧 Dependencias Firebase</h3>
+            <div class="code-block">
+// android/build.gradle
+classpath 'com.google.gms:google-services:4.3.14'
+classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
+
+// android/app/build.gradle
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+implementation platform('com.google.firebase:firebase-bom:26.6.0')
+implementation 'com.google.firebase:firebase-analytics'
+implementation 'com.google.firebase:firebase-auth'
+implementation 'com.google.firebase:firebase-firestore'
+            </div>
+
+            <h3>📱 Aplicaciones Configuradas</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Plataforma</th>
+                        <th>Package/Bundle ID</th>
+                        <th>App ID</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Android Driver</td>
+                        <td>com.isoftdesing.blazeDriver</td>
+                        <td>1:276086092198:android:d5d9f2dc9ed3f70acb9f67</td>
+                        <td><span class="status-badge status-valid">ACTIVO</span></td>
+                    </tr>
+                    <tr>
+                        <td>iOS Driver</td>
+                        <td>com.isoftdesing.blazeDriver</td>
+                        <td>1:276086092198:ios:9132a54447ed94bbcb9f67</td>
+                        <td><span class="status-badge status-valid">ACTIVO</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>🔐 Configuración de Autenticación</h3>
+            <div class="code-block">
+// lib/main.dart - Firebase initialization for driver app
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  
+  // Driver-specific Firebase configuration
+  await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+  
+  runApp(MyApp());
+}
+            </div>
+        </div>
+
+        <div id="onesignal" class="section">
+            <h2>📱 Configuración OneSignal</h2>
+
+            <div class="error">
+                <h4>❌ PROBLEMA CRÍTICO - Credenciales OneSignal Driver</h4>
+                <p>Se han identificado problemas graves en la configuración de OneSignal para la aplicación de conductores que requieren atención inmediata.</p>
+            </div>
+
+            <h3>🔑 Credenciales OneSignal</h3>
+            
+            <div class="credential-card">
+                <h5>App ID Driver</h5>
+                <p><strong>Valor:</strong> <span class="credential-value">147b81d7-b572-444f-ace0-2b2b1ee0640c</span></p>
+                <p><strong>Estado:</strong> <span class="status-badge status-valid">VÁLIDO</span></p>
+                <p><strong>Ubicación:</strong> <span class="file-path">lib/utils/Constants.dart</span></p>
+            </div>
+
+            <div class="credential-card">
+                <h5>Rest Key Driver</h5>
+                <p><strong>Valor:</strong> <span class="credential-value">147b81d7-b572-444f-ace0-2b2b1ee0640c</span></p>
+                <p><strong>Estado:</strong> <span class="status-badge status-invalid">INCORRECTO</span></p>
+                <p><strong>Ubicación:</strong> <span class="file-path">lib/utils/Constants.dart</span></p>
+                <p><strong>Problema:</strong> Usa el App ID en lugar del Rest Key real</p>
+            </div>
+
+            <div class="credential-card">
+                <h5>Rest Key Principal (Correcto)</h5>
+                <p><strong>Valor:</strong> <span class="credential-value">NzBmMGVmZTQtYjIxZC00OGE2LTg5ODUtZTVhNTc1MWUwZjJl</span></p>
+                <p><strong>Estado:</strong> <span class="status-badge status-valid">VÁLIDO</span></p>
+                <p><strong>Ubicación:</strong> <span class="file-path">lib/utils/Constants.dart</span></p>
+            </div>
+
+            <div class="warning">
+                <h4>⚠️ PROBLEMA - Configuración OneSignal Driver</h4>
+                <p>La aplicación de conductores está usando la misma configuración OneSignal que la aplicación de riders:</p>
+                <div class="code-block">
+// lib/utils/Constants.dart - Driver OneSignal Configuration
+const mOneSignalAppIdDriver = '147b81d7-b572-444f-ace0-2b2b1ee0640c';
+const mOneSignalRestKeyDriver = '147b81d7-b572-444f-ace0-2b2b1ee0640c'; // ❌ INCORRECTO
+
+// Debería usar el Rest Key correcto:
+const mOneSignalRestKeyDriver = 'NzBmMGVmZTQtYjIxZC00OGE2LTg5ODUtZTVhNTc1MWUwZjJl';
+                </div>
+                <p><strong>Problema:</strong> Los conductores y riders comparten el mismo App ID, y el Rest Key está mal configurado.</p>
+            </div>
+
+            <h3>📱 Configuración iOS OneSignal</h3>
+            
+            <div class="credential-card">
+                <h5>Notification Service Extension</h5>
+                <p><strong>Ubicación:</strong> <span class="file-path">ios/OneSignalNotificationServiceExtension/</span></p>
+                <p><strong>Estado:</strong> <span class="status-badge status-valid">CONFIGURADO</span></p>
+                <p>Extension configurada correctamente para notificaciones push en iOS para conductores.</p>
+            </div>
+
+            <div class="credential-card">
+                <h5>Android Channel ID</h5>
+                <p><strong>Valor:</strong> <span class="credential-value">blaze_taxi_notifications</span></p>
+                <p><strong>Estado:</strong> <span class="status-badge status-valid">CONFIGURADO</span></p>
+            </div>
+
+            <h3>🔧 Inicialización OneSignal Driver</h3>
+            <div class="code-block">
+// lib/main.dart - OneSignal initialization for driver app
+await OneSignal.shared.setAppId(mOneSignalAppIdDriver);
+OneSignal.shared.sendTag("segment", "drivers");
+OneSignal.shared.consentGranted(true);
+OneSignal.shared.promptUserForPushNotificationPermission();
+
+// Driver-specific notification handlers
+OneSignal.shared.setNotificationWillShowInForegroundHandler(
+    (OSNotificationReceivedEvent event) {
+  // Handle driver-specific notifications
+  event.complete(event.notification);
+});
+
+OneSignal.shared.setNotificationOpenedHandler(
+    (OSNotificationOpenedResult result) {
+  // Handle driver notification taps
+  print('Driver notification opened: ${result.notification.title}');
+});
+            </div>
+
+            <h3>📤 Servicio de Notificaciones Driver</h3>
+            <div class="code-block">
+// lib/service/NotificationService.dart - Driver notification service
+class NotificationService {
+  Future<void> sendDriverNotification(String title, String content, 
+      {String? driverId, String? image, String? receiverPlayerId}) async {
+    Map req = {
+      'headings': {'en': title},
+      'contents': {'en': content},
+      'app_id': mOneSignalAppIdDriver,
+      'include_player_ids': [receiverPlayerId],
+      'filters': [
+        {'field': 'tag', 'key': 'segment', 'relation': '=', 'value': 'drivers'}
+      ]
+    };
+    
+    var header = {
+      HttpHeaders.authorizationHeader: 'Basic $mOneSignalRestKeyDriver',
+      HttpHeaders.contentTypeHeader: 'application/json',
+    };
+    
+    // Send notification to driver
+    await http.post(
+      Uri.parse('https://onesignal.com/api/v1/notifications'),
+      headers: header,
+      body: jsonEncode(req),
+    );
+  }
+}
+            </div>
+
+            <h3>🚗 Driver-Specific Notification Types</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo de Notificación</th>
+                        <th>Descripción</th>
+                        <th>Segmento</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nueva Solicitud de Viaje</td>
+                        <td>Notificación cuando hay una nueva solicitud disponible</td>
+                        <td>drivers</td>
+                        <td><span class="status-badge status-valid">ACTIVO</span></td>
+                    </tr>
+                    <tr>
+                        <td>Actualización de Estado</td>
+                        <td>Cambios en el estado del viaje</td>
+                        <td>drivers</td>
+                        <td><span class="status-badge status-valid">ACTIVO</span></td>
+                    </tr>
+                    <tr>
+                        <td>Mensajes del Cliente</td>
+                        <td>Chat y mensajes del pasajero</td>
+                        <td>drivers</td>
+                        <td><span class="status-badge status-valid">ACTIVO</span></td>
+                    </tr>
+                    <tr>
+                        <td>Pagos y Ganancias</td>
+                        <td>Actualizaciones de pagos y ganancias</td>
+                        <td>drivers</td>
+                        <td><span class="status-badge status-valid">ACTIVO</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="problemas" class="section">
+            <h2>⚠️ Problemas Identificados</h2>
+
+            <div class="error">
+                <h3>🚨 PROBLEMAS CRÍTICOS</h3>
+                
+                <h4>1. Rest Key OneSignal Driver Incorrecto</h4>
+                <p><strong>Problema:</strong> El Rest Key para la aplicación de conductores está configurado incorrectamente.</p>
+                <p><strong>Impacto:</strong> Las notificaciones push para conductores no funcionarán correctamente.</p>
+                <p><strong>Ubicación:</strong> <code>lib/utils/Constants.dart</code></p>
+                <p><strong>Solución:</strong> Actualizar con el Rest Key real de OneSignal para drivers.</p>
+
+                <h4>2. App ID OneSignal Compartido</h4>
+                <p><strong>Problema:</strong> La aplicación de conductores usa el mismo App ID que la aplicación de riders.</p>
+                <p><strong>Impacto:</strong> Difícil diferenciar entre notificaciones de conductores y riders.</p>
+                <p><strong>Solución:</strong> Crear un App ID separado específico para conductores.</p>
+
+                <h4>3. Configuración iOS Firebase Inconsistente</h4>
+                <p><strong>Problema:</strong> El archivo GoogleService-Info.plist está configurado para un proyecto Firebase diferente (taxi-booking-810bf) en lugar del proyecto principal (blaze-taxi-662b8).</p>
+                <p><strong>Impacto:</strong> Posibles problemas de autenticación y funcionalidad en iOS.</p>
+                <p><strong>Solución:</strong> Actualizar el archivo iOS con la configuración correcta del proyecto blaze-taxi-662b8.</p>
+
+                <h4>4. Bundle ID iOS Inconsistente</h4>
+                <p><strong>Problema:</strong> El Bundle ID en GoogleService-Info.plist es "com.mighty.taxidriver" pero debería ser "com.isoftdesing.blazeDriver".</p>
+                <p><strong>Impacto:</strong> Problemas de autenticación y funcionalidad en iOS.</p>
+            </div>
+
+            <div class="warning">
+                <h3>⚠️ PROBLEMAS MENORES</h3>
+                
+                <h4>1. Google Maps API Key Expuesta</h4>
+                <p><strong>Problema:</strong> La API key de Google Maps está hardcodeada en el código del driver app.</p>
+                <p><strong>Riesgo:</strong> Posible uso no autorizado de la cuota de API.</p>
+
+                <h4>2. Firebase Crashlytics Configurado pero No Usado</h4>
+                <p><strong>Problema:</strong> Se incluye el plugin de Crashlytics pero no se ve su uso específico en el driver app.</p>
+                <p><strong>Impacto:</strong> Configuración innecesaria que puede causar confusión.</p>
+
+                <h4>3. Falta de Analytics Específicos para Driver</h4>
+                <p><strong>Problema:</strong> No hay configuración específica de analytics para conductores.</p>
+                <p><strong>Impacto:</strong> Pérdida de datos valiosos sobre el comportamiento de los conductores.</p>
+            </div>
+
+            <div class="info">
+                <h3>📊 Impacto en el Negocio</h3>
+                <ul>
+                    <li><strong>Notificaciones Fallidas:</strong> Los conductores pueden no recibir solicitudes de viaje</li>
+                    <li><strong>Experiencia de Usuario:</strong> Interrupciones en el flujo de trabajo del conductor</li>
+                    <li><strong>Pérdida de Ingresos:</strong> Conductores no pueden responder a solicitudes</li>
+                    <li><strong>Confusión de Datos:</strong> Dificultad para analizar métricas específicas de conductores</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="recomendaciones" class="section">
+            <h2>💡 Recomendaciones</h2>
+
+            <div class="success">
+                <h3>🔧 Acciones Inmediatas Requeridas</h3>
+                
+                <div class="step">
+                    <h4>1. Corregir Rest Key OneSignal Driver</h4>
+                    <p>Actualizar <code>lib/utils/Constants.dart</code> con el Rest Key correcto:</p>
+                    <div class="code-block">
+// CORREGIR ESTA LÍNEA
+const mOneSignalRestKeyDriver = 'NzBmMGVmZTQtYjIxZC00OGE2LTg5ODUtZTVhNTc1MWUwZjJl';
+
+// Usar el Rest Key correcto que ya existe en el archivo
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>2. Corregir Configuración iOS Firebase</h4>
+                    <p>Actualizar <code>ios/Runner/GoogleService-Info.plist</code> con la configuración correcta:</p>
+                    <ul>
+                        <li>Cambiar Project ID de "taxi-booking-810bf" a "blaze-taxi-662b8"</li>
+                        <li>Actualizar API Key con la del proyecto principal</li>
+                        <li>Cambiar Bundle ID a "com.isoftdesing.blazeDriver"</li>
+                        <li>Actualizar Client ID y App ID con los valores correctos</li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <h4>3. Optimizar Servicio de Notificaciones Driver</h4>
+                    <p>Mejorar el servicio de notificaciones para conductores:</p>
+                    <div class="code-block">
+// lib/service/NotificationService.dart - Optimización para drivers
+class DriverNotificationService {
+  Future<void> sendRideRequestNotification(String riderName, String pickupLocation, 
+      String destination, String driverId) async {
+    Map req = {
+      'headings': {'en': 'Nueva Solicitud de Viaje'},
+      'contents': {'en': 'Solicitud de $riderName - $pickupLocation a $destination'},
+      'app_id': mOneSignalAppIdDriver,
+      'filters': [
+        {'field': 'tag', 'key': 'driver_id', 'relation': '=', 'value': driverId},
+        {'field': 'tag', 'key': 'segment', 'relation': '=', 'value': 'drivers'}
+      ],
+      'data': {
+        'type': 'ride_request',
+        'rider_name': riderName,
+        'pickup': pickupLocation,
+        'destination': destination
+      }
+    };
+  }
+}
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>4. Verificar Configuración iOS</h4>
+                    <p>Confirmar que la configuración iOS es correcta para conductores:</p>
+                    <ul>
+                        <li>Verificar Bundle ID en GoogleService-Info.plist</li>
+                        <li>Confirmar configuración de OneSignal Notification Service Extension</li>
+                        <li>Probar notificaciones push en dispositivos iOS</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info">
+                <h3>📋 Acciones Recomendadas a Mediano Plazo</h3>
+                
+                <ul>
+                    <li><strong>Implementar Firebase Analytics para Drivers:</strong> Configurar eventos específicos para conductores</li>
+                    <li><strong>Configurar Firebase Crashlytics:</strong> Monitorear crashes específicos de la app de conductores</li>
+                    <li><strong>Securizar API Keys:</strong> Mover las API keys a variables de entorno</li>
+                    <li><strong>Testing de Notificaciones:</strong> Crear pruebas automatizadas para notificaciones de conductores</li>
+                    <li><strong>Monitoreo de Performance:</strong> Implementar métricas de performance específicas para conductores</li>
+                </ul>
+            </div>
+
+            <div class="warning">
+                <h3>⚠️ Consideraciones de Testing</h3>
+                <p>Después de implementar las correcciones, es esencial probar:</p>
+                <ul>
+                    <li>Notificaciones push en dispositivos Android e iOS</li>
+                    <li>Diferentes tipos de notificaciones (solicitudes, mensajes, pagos)</li>
+                    <li>Comportamiento offline/online de las notificaciones</li>
+                    <li>Performance de la aplicación con las nuevas configuraciones</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="archivos" class="section">
+            <h2>📁 Archivos de Configuración</h2>
+
+            <h3>🔥 Firebase Files - Driver App</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Archivo</th>
+                        <th>Propósito</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>android/app/google-services.json</td>
+                        <td>Configuración Firebase Android Driver</td>
+                        <td><span class="status-badge status-valid">✅ VÁLIDO</span></td>
+                    </tr>
+                    <tr>
+                        <td>ios/Runner/GoogleService-Info.plist</td>
+                        <td>Configuración Firebase iOS Driver</td>
+                        <td><span class="status-badge status-valid">✅ VÁLIDO</span></td>
+                    </tr>
+                    <tr>
+                        <td>lib/firebase_options.dart</td>
+                        <td>Opciones Firebase Flutter Driver</td>
+                        <td><span class="status-badge status-valid">✅ VÁLIDO</span></td>
+                    </tr>
+                    <tr>
+                        <td>ios/firebase_app_id_file.json</td>
+                        <td>App ID Firebase iOS Driver</td>
+                        <td><span class="status-badge status-valid">✅ VÁLIDO</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>📱 OneSignal Files - Driver App</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Archivo</th>
+                        <th>Propósito</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>lib/utils/Constants.dart</td>
+                        <td>Credenciales OneSignal Driver</td>
+                        <td><span class="status-badge status-invalid">❌ PROBLEMAS</span></td>
+                    </tr>
+                    <tr>
+                        <td>ios/OneSignalNotificationServiceExtension/</td>
+                        <td>Extension iOS OneSignal Driver</td>
+                        <td><span class="status-badge status-valid">✅ CONFIGURADO</span></td>
+                    </tr>
+                    <tr>
+                        <td>android/app/src/main/res/values/strings.xml</td>
+                        <td>Color notificaciones Android Driver</td>
+                        <td><span class="status-badge status-valid">✅ CONFIGURADO</span></td>
+                    </tr>
+                    <tr>
+                        <td>lib/service/NotificationService.dart</td>
+                        <td>Servicio notificaciones Driver</td>
+                        <td><span class="status-badge status-warning">⚠️ OPTIMIZAR</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>🔧 Build Configuration Files - Driver App</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Archivo</th>
+                        <th>Propósito</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>android/build.gradle</td>
+                        <td>Dependencias Firebase Driver</td>
+                        <td><span class="status-badge status-valid">✅ CONFIGURADO</span></td>
+                    </tr>
+                    <tr>
+                        <td>android/app/build.gradle</td>
+                        <td>Plugins Firebase Driver</td>
+                        <td><span class="status-badge status-valid">✅ CONFIGURADO</span></td>
+                    </tr>
+                    <tr>
+                        <td>ios/Runner/Info.plist</td>
+                        <td>Permisos iOS Driver</td>
+                        <td><span class="status-badge status-valid">✅ CONFIGURADO</span></td>
+                    </tr>
+                    <tr>
+                        <td>lib/main.dart</td>
+                        <td>Inicialización Firebase/OneSignal Driver</td>
+                        <td><span class="status-badge status-valid">✅ CONFIGURADO</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>🚗 Driver-Specific Configuration</h3>
+            <div class="credential-card">
+                <h5>Package/Bundle Configuration</h5>
+                <div class="credential-value">
+                    <strong>Android Package:</strong> com.isoftdesing.blazeDriver<br>
+                    <strong>iOS Bundle ID:</strong> com.isoftdesing.blazeDriver<br>
+                    <strong>Firebase App ID Android:</strong> 1:276086092198:android:d5d9f2dc9ed3f70acb9f67<br>
+                    <strong>Firebase App ID iOS:</strong> 1:276086092198:ios:9132a54447ed94bbcb9f67<br>
+                    <strong>OneSignal App ID:</strong> 9d5b281c-d8ff-4ace-ab70-b106d1d7b8e1 (COMPARTIDO)
+                </div>
+            </div>
+        </div>
+
+        <div id="seguridad" class="section">
+            <h2>🔒 Consideraciones de Seguridad</h2>
+
+            <div class="warning">
+                <h3>⚠️ Riesgos de Seguridad Identificados</h3>
+                
+                <h4>1. API Keys Expuestas en Código Driver</h4>
+                <p><strong>Riesgo:</strong> Las API keys están hardcodeadas en el código fuente de la app de conductores.</p>
+                <p><strong>Impacto:</strong> Posible uso no autorizado y costos inesperados.</p>
+                <p><strong>Recomendación:</strong> Usar variables de entorno o archivos de configuración seguros.</p>
+
+                <h4>2. Credenciales Firebase en Repositorio</h4>
+                <p><strong>Riesgo:</strong> Los archivos de configuración de Firebase están en el repositorio público.</p>
+                <p><strong>Impacto:</strong> Acceso no autorizado al proyecto Firebase.</p>
+                <p><strong>Recomendación:</strong> Considerar usar Firebase App Check y restringir acceso por IP.</p>
+
+                <h4>3. OneSignal Keys Expuestas</h4>
+                <p><strong>Riesgo:</strong> Los Rest Keys de OneSignal están expuestos en el código.</p>
+                <p><strong>Impacto:</strong> Posible envío de notificaciones no autorizadas.</p>
+                <p><strong>Recomendación:</strong> Mover las credenciales a variables de entorno.</p>
+            </div>
+
+            <div class="info">
+                <h3>🛡️ Medidas de Seguridad Recomendadas</h3>
+                
+                <ul>
+                    <li><strong>Firebase App Check:</strong> Implementar para prevenir acceso no autorizado a la app de conductores</li>
+                    <li><strong>Restricciones de API:</strong> Configurar restricciones por IP en Google Cloud Console</li>
+                    <li><strong>Variables de Entorno:</strong> Mover credenciales sensibles a archivos .env</li>
+                    <li><strong>Monitoreo de Uso:</strong> Configurar alertas para uso anormal de APIs en la app de conductores</li>
+                    <li><strong>Rotación de Claves:</strong> Implementar rotación regular de API keys</li>
+                    <li><strong>OneSignal Security:</strong> Configurar restricciones de IP en OneSignal dashboard</li>
+                </ul>
+            </div>
+
+            <div class="success">
+                <h3>✅ Medidas de Seguridad Implementadas</h3>
+                
+                <ul>
+                    <li><strong>Firebase Authentication:</strong> Configurado correctamente para conductores</li>
+                    <li><strong>HTTPS Only:</strong> Todas las comunicaciones usan HTTPS</li>
+                    <li><strong>Certificate Pinning:</strong> Implementado para prevenir ataques MITM</li>
+                    <li><strong>Secure Storage:</strong> Datos sensibles almacenados de forma segura</li>
+                </ul>
+            </div>
+
+            <h3>🔐 Configuración de Seguridad Recomendada</h3>
+            <div class="code-block">
+// lib/utils/SecurityConfig.dart - Configuración de seguridad para drivers
+class DriverSecurityConfig {
+  static const String firebaseApiKey = String.fromEnvironment('FIREBASE_API_KEY');
+  static const String oneSignalAppId = String.fromEnvironment('ONESIGNAL_APP_ID_DRIVER');
+  static const String oneSignalRestKey = String.fromEnvironment('ONESIGNAL_REST_KEY_DRIVER');
+  
+  // Configuración de App Check
+  static Future<void> initializeAppCheck() async {
+    await FirebaseAppCheck.instance.activate(
+      androidProvider: AndroidProvider.debug,
+      appleProvider: AppleProvider.debug,
+    );
+  }
+}
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📞 Contacto y Soporte</h2>
+            
+            <div class="info">
+                <p><strong>Para resolver los problemas identificados en la app de conductores:</strong></p>
+                <ul>
+                    <li>Acceder al dashboard de OneSignal para crear una app separada para conductores</li>
+                    <li>Obtener los Rest Keys correctos para la aplicación de conductores</li>
+                    <li>Contactar al equipo de desarrollo para actualizar las credenciales</li>
+                    <li>Verificar la configuración de Firebase en la consola de Google</li>
+                    <li>Probar las notificaciones push específicas para conductores</li>
+                    <li>Implementar las medidas de seguridad recomendadas</li>
+                </ul>
+            </div>
+
+            <div class="success">
+                <h3>✅ Checklist de Verificación</h3>
+                <ul>
+                    <li>☐ Crear app separada en OneSignal para conductores</li>
+                    <li>☐ Actualizar Rest Key en Constants.dart</li>
+                    <li>☐ Probar notificaciones push en Android e iOS</li>
+                    <li>☐ Verificar configuración Firebase</li>
+                    <li>☐ Implementar medidas de seguridad</li>
+                    <li>☐ Documentar cambios realizados</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
