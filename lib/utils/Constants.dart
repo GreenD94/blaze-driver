@@ -14,15 +14,15 @@ const mBaseUrl = "$DOMAIN_URL/api/";
 
 final client = MqttServerClient.withPort("broker.hivemq.com", "", 1883);
 
-const mOneSignalAppId = '147b81d7-b572-444f-ace0-2b2b1ee0640c';
-const mOneSignalRestKey = 'NzBmMGVmZTQtYjIxZC00OGE2LTg5ODUtZTVhNTc1MWUwZjJl';
-const mOneSignalChannelID = '633149d9-ac48-432c-8fab-6f529f4017de';
+const mOneSignalAppId = '9d5b281c-d8ff-4ace-ab70-b106d1d7b8e1';
+const mOneSignalRestKey = 'os_v2_app_tvnsqhgy75fm5k3qwedndv5y4hk65u647xxegvmyy7pxe5l6by27oif5x6hotiwbyvu3e44vfdmy4ux3iix4zudhd3mzrigxo7hxtva';
+const mOneSignalChannelID = 'blaze_taxi_notifications';
 
-const mOneSignalAppIdRider = '147b81d7-b572-444f-ace0-2b2b1ee0640c';
-const mOneSignalRestKeyRider = '147b81d7-b572-444f-ace0-2b2b1ee0640c';
+const mOneSignalAppIdRider = '9d5b281c-d8ff-4ace-ab70-b106d1d7b8e1';
+const mOneSignalRestKeyRider = '9d5b281c-d8ff-4ace-ab70-b106d1d7b8e1';
 
-const mOneSignalAppIdDriver = '147b81d7-b572-444f-ace0-2b2b1ee0640c';
-const mOneSignalRestKeyDriver = '147b81d7-b572-444f-ace0-2b2b1ee0640c';
+const mOneSignalAppIdDriver = '9d5b281c-d8ff-4ace-ab70-b106d1d7b8e1';
+const mOneSignalRestKeyDriver = '9d5b281c-d8ff-4ace-ab70-b106d1d7b8e1';
 
 const String WP_NUMBER = '5804129142512';
 const String WP_MESSAGE = 'Hola soy conductor, quisiera recargar mi billetera';
